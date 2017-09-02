@@ -101,6 +101,9 @@ if((typeof module) !== 'undefined') {
     // A utility function to parse an expression to left hand side when working with strings
 
     var toLHS = function(eqn) {
+        //if it's a vector return it as such
+        if(eqn instanceof core.Vector)
+            eqn = eqn.elements[0];
         //If it's an equation then call its toLHS function instead
         if(eqn instanceof Equation)
             return eqn.toLHS();
@@ -110,7 +113,7 @@ if((typeof module) !== 'undefined') {
         return _.subtract(e1, e2);
     };
     // Solves a system of equations
-    var sys_solve = function(eqns, var_array) {
+    var sys_solve = function(eqns, var_array) { 
         //check if a var_array was specified
         nerdamer.clearVars();
         //parse all the equations to LHS. Remember that they come in as strings
@@ -291,12 +294,17 @@ if((typeof module) !== 'undefined') {
      * @param {type} solve_for
      * @returns {Array}
      */
-    var solve = function(eqns, solve_for, solutions) {
+    var solve = function(eqns, solve_for, solutions) { 
+        //super lazy fix. Just make it an array of strings. Works but not really efficient
+        if(core.Utils.isVector(eqns))
+            eqns = eqns.elements.map(function(x){ return x.toString(); });
+        
         solve_for = solve_for || 'x'; //assumes x by default
         //If it's an array then solve it as a system of equations
         if(isArray(eqns)) {
             return sys_solve.apply(undefined, arguments);
         }
+        
         solutions = solutions || [];
         //maybe we get lucky
         if(eqns.group === S && eqns.contains(solve_for)) {
@@ -652,6 +660,7 @@ if((typeof module) !== 'undefined') {
         {
             name: 'solveEquations',
             parent: 'nerdamer',
+            numargs: -1,
             visible: true,
             build: function(){ return solve; }
         },

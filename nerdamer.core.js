@@ -8,7 +8,7 @@
 var nerdamer = (function(imports) { 
     "use strict";
 
-    var version = '0.7.12',
+    var version = '0.7.13',
 
         _ = new Parser(), //nerdamer's parser
         //import bigInt
@@ -50,7 +50,7 @@ var nerdamer = (function(imports) {
             VALIDATION_REGEX: /^[a-z_αAβBγΓδΔϵEζZηHθΘιIκKλΛμMνNξΞoOπΠρPσΣτTυϒϕΦχXψΨωΩ][a-z\d\_αAβBγΓδΔϵEζZηHθΘιIκKλΛμMνNξΞoOπΠρPσΣτTυϒϕΦχXψΨωΩ]*$/i,
             //Aliases
             ALIASES: {
-                'π': 'PI'
+                'π': 'pi'
             }
         },
         
@@ -851,24 +851,32 @@ var nerdamer = (function(imports) {
                 factors.updateHash();
                 return factors;
             },
-            //uses trial division to get factors
-            ifactor: function(n, factors) { 
-                factors = factors || {};
-                var r = Math.floor(Math.sqrt(n));
-                var lcprime = PRIMES[PRIMES.length-1];
-                //a one-time cost... Hopefully ... And don't bother for more than a million
-                //takes too long
-                if(r > lcprime && n < 1e6) generatePrimes(r);
-                var l = PRIMES.length;
-                for(var i=0; i<l; i++) {
-                    var prime = PRIMES[i];
-                    //trial division
-                    while(n%prime === 0) {
-                        n = n/prime;
-                        factors[prime] = (factors[prime] || 0)+1;
-                    }
+            ifactor: function(n, maxn) { 
+                n = new bigInt(n); 
+                maxn = maxn || 1000000; //safety
+                //container for the factors
+                var factors = {},
+                    i = 1, //start at one since we'll just increment at beginning of loop
+                    remainder;
+                
+                while(true) { 
+                    i++; //move forward
+                    if(i > maxn)
+                        break; //we've reached the nax allowable number
+                    
+                    remainder = n.mod(i); // n % current_n to check if it's a factor
+                    if(!remainder.equals(0))
+                        continue; //not a factor so skip
+                    
+                    if(typeof factors[i] === 'undefined')
+                        factors[i] = 0;
+                    
+                    factors[i]++;
+                    n = n.divide(i);
+                    //give the number one more try
+                    i--;
                 }
-                if(n > 1) factors[n] = 1;
+
                 return factors;
             },
             //factors a number into rectangular box. If sides are primes that this will be
@@ -1250,7 +1258,7 @@ var nerdamer = (function(imports) {
         else if(isVector(obj)) { 
             var l = obj.elements.length,
                 c = [];
-            for(var i=0; i<l; i++) c.push(obj.elements[i].text());
+            for(var i=0; i<l; i++) c.push(obj.elements[i].text(option));
             return '['+c.join(',')+']';
         }
         else {
@@ -1708,6 +1716,9 @@ var nerdamer = (function(imports) {
         return symbol;
     };
     Symbol.prototype = {
+        isInt: function() {
+            return this.group === N && this.multiplier.den.equals(1);
+        },
         /**
          * Checks to see if two functions are of equal value
          */
@@ -3036,6 +3047,9 @@ var nerdamer = (function(imports) {
                     else {
                         var unsubbed = e;
                         // make substitutions
+                        //first sub in aliases
+                        if(e in Settings.ALIASES)
+                            e = _.parse(Settings.ALIASES[e]);
                         //constants take higher priority
                         if(e in constants)
                             e = new Symbol(constants[e]);
@@ -3787,17 +3801,22 @@ var nerdamer = (function(imports) {
         }
         
         function pfactor(symbol) {
+            if(symbol.group === FN)
+                symbol = evaluate(symbol);
+            
             var retval = new Symbol(1);
-            if(symbol.isConstant()) {
-                var m = symbol.multiplier.toDecimal();
-                if(isInt(m)) {
-                    var factors = Math2.ifactor(m);
+            if(symbol.isConstant() && symbol.isInt()) {
+                if(symbol.equals(0))
+                    return symbol; //Fix for issue #124
+                
+                if(symbol.isInt()) {
+                    var factors = Math2.ifactor(symbol.toString());
                     for(var factor in factors) {
                         var p = factors[factor];
                         retval = _.multiply(retval, _.symfunction('parens', [new Symbol(factor).setPower(new Frac(p))]));
                     }
                 }
-                else {
+                else { 
                     var n = pfactor(new Symbol(symbol.multiplier.num));
                     var d = pfactor(new Symbol(symbol.multiplier.den));
                     retval = _.multiply(_.symfunction('parens', [n]), _.symfunction('parens', [d]).invert());
@@ -6778,7 +6797,8 @@ var nerdamer = (function(imports) {
         //check if it's not already a constant
         if(v in _.constants)
             err('Cannot set value for constant '+v);
-        if(val === 'delete') delete VARS[v];
+        if(val === 'delete' || val === '') 
+            delete VARS[v];
         else {
             VARS[v] = isSymbol(val) ? val : _.parse(val);
         }
