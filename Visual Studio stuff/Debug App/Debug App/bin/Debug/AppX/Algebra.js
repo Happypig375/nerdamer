@@ -2262,6 +2262,11 @@ if((typeof module) !== 'undefined') {
             return status;
         },
         gcd: function(a, b) { 
+            if(a.group === S && b.group === S && a.value !== b.value
+                    || a.group === EX 
+                    || b.group === EX)
+                return _.symfunction('gcd', arguments);
+            
             if(a.group === CB || b.group === CB) {
                 var q = _.divide(a.clone(), b.clone()); //get the quotient
                 var t = _.multiply(b.clone(), q.getDenom());//multiply by the denominator
@@ -2281,6 +2286,11 @@ if((typeof module) !== 'undefined') {
                 // return core.Math2.QGCD(new Frac(+a), new Frac(+b));
                 return new Symbol(core.Math2.QGCD(new Frac(+a), new Frac(+b)));
             }
+            
+            //feels counter intuitive but it works. Issue #123 (nerdamer("gcd(x+y,(x+y)^2)"))
+            a = _.expand(a);
+            b = _.expand(b);
+            
             if(a.length < b.length) { //swap'm
                 var t = a; a = b; b = t;
             }
@@ -2297,7 +2307,8 @@ if((typeof module) !== 'undefined') {
                     T = __.div(a, t);
                     b = T[1]; 
                     if(T[0].equals(0)) {
-                        return new Symbol(core.Math2.QGCD(a.multiplier, b.multiplier));
+                        //return _.multiply(new Symbol(core.Math2.QGCD(a.multiplier, b.multiplier)), b);
+                        new Symbol(core.Math2.QGCD(a.multiplier, b.multiplier));
                     }
                     a = t; 
                 }
@@ -2312,7 +2323,11 @@ if((typeof module) !== 'undefined') {
                         x.multiplier = x.multiplier.divide(gcd);
                     });
                 }
-
+                
+                //return symbolic function for gcd in indeterminate form
+                if(a.equals(1) && !a.isConstant() && !b.isConstant())
+                    return _.symfunction('gcd', arguments);
+                
                 return a;
             }
         },

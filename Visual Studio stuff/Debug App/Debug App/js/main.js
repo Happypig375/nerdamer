@@ -1,3 +1,2 @@
 ﻿// Your code here!
-document.write({ 'x': 7, 'nerrrrrrrd': {'name': 'nerd', surname: 'noob'}});
-document.write(nerdamer("1+1").evaluate().text())
+document.write(nerdamer('factor(4s-t^2+4t-s t)').toString());

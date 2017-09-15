@@ -1,0 +1,11 @@
+C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\NerdamerMarkdownGen\NerdamerMarkdownGen\bin\Debug\NerdamerMarkdownGen.exe.config
+C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\NerdamerMarkdownGen\NerdamerMarkdownGen\bin\Debug\NerdamerMarkdownGen.exe
+C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\NerdamerMarkdownGen\NerdamerMarkdownGen\bin\Debug\NerdamerMarkdownGen.pdb
+C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\NerdamerMarkdownGen\NerdamerMarkdownGen\bin\Debug\Jint.dll
+C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\NerdamerMarkdownGen\NerdamerMarkdownGen\obj\Debug\NerdamerMarkdownGen.csprojResolveAssemblyReference.cache
+C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\NerdamerMarkdownGen\NerdamerMarkdownGen\obj\Debug\NerdamerMarkdownGen.Form.resources
+C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\NerdamerMarkdownGen\NerdamerMarkdownGen\obj\Debug\NerdamerMarkdownGen.Properties.Resources.resources
+C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\NerdamerMarkdownGen\NerdamerMarkdownGen\obj\Debug\NerdamerMarkdownGen.csproj.GenerateResource.Cache
+C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\NerdamerMarkdownGen\NerdamerMarkdownGen\obj\Debug\NerdamerMarkdownGen.csproj.CoreCompileInputs.cache
+C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\NerdamerMarkdownGen\NerdamerMarkdownGen\obj\Debug\NerdamerMarkdownGen.exe
+C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\NerdamerMarkdownGen\NerdamerMarkdownGen\obj\Debug\NerdamerMarkdownGen.pdb
