@@ -31,22 +31,30 @@
             this.Panel = new System.Windows.Forms.TableLayoutPanel();
             this.In = new System.Windows.Forms.TextBox();
             this.Out = new System.Windows.Forms.TextBox();
+            this.Progress = new System.Windows.Forms.ProgressBar();
+            this.Top = new System.Windows.Forms.FlowLayoutPanel();
+            this.TimeoutLabel = new System.Windows.Forms.Label();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.Panel.SuspendLayout();
+            this.Top.SuspendLayout();
             this.SuspendLayout();
             // 
             // Panel
             // 
             this.Panel.ColumnCount = 1;
-            this.Panel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.Panel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.Panel.Controls.Add(this.In, 0, 0);
-            this.Panel.Controls.Add(this.Out, 0, 1);
+            this.Panel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.Panel.Controls.Add(this.In, 0, 1);
+            this.Panel.Controls.Add(this.Out, 0, 2);
+            this.Panel.Controls.Add(this.Progress, 0, 3);
+            this.Panel.Controls.Add(this.Top, 0, 0);
             this.Panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Panel.Location = new System.Drawing.Point(0, 0);
             this.Panel.Name = "Panel";
-            this.Panel.RowCount = 2;
+            this.Panel.RowCount = 4;
+            this.Panel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.Panel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.Panel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.Panel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.Panel.Size = new System.Drawing.Size(284, 261);
             this.Panel.TabIndex = 0;
             // 
@@ -54,11 +62,11 @@
             // 
             this.In.Dock = System.Windows.Forms.DockStyle.Fill;
             this.In.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.In.Location = new System.Drawing.Point(3, 3);
+            this.In.Location = new System.Drawing.Point(3, 33);
             this.In.Multiline = true;
             this.In.Name = "In";
             this.In.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.In.Size = new System.Drawing.Size(278, 124);
+            this.In.Size = new System.Drawing.Size(278, 99);
             this.In.TabIndex = 0;
             this.In.TextChanged += new System.EventHandler(this.In_TextChanged);
             // 
@@ -66,13 +74,49 @@
             // 
             this.Out.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Out.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Out.Location = new System.Drawing.Point(3, 133);
+            this.Out.Location = new System.Drawing.Point(3, 138);
             this.Out.Multiline = true;
             this.Out.Name = "Out";
             this.Out.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.Out.Size = new System.Drawing.Size(278, 125);
+            this.Out.Size = new System.Drawing.Size(278, 99);
             this.Out.TabIndex = 1;
             this.Out.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Out_KeyDown);
+            // 
+            // Progress
+            // 
+            this.Progress.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Progress.Location = new System.Drawing.Point(3, 243);
+            this.Progress.Name = "Progress";
+            this.Progress.Size = new System.Drawing.Size(278, 15);
+            this.Progress.TabIndex = 2;
+            // 
+            // Top
+            // 
+            this.Top.Controls.Add(this.TimeoutLabel);
+            this.Top.Controls.Add(this.dateTimePicker1);
+            this.Top.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Top.Location = new System.Drawing.Point(3, 3);
+            this.Top.Name = "Top";
+            this.Top.Size = new System.Drawing.Size(278, 24);
+            this.Top.TabIndex = 3;
+            // 
+            // TimeoutLabel
+            // 
+            this.TimeoutLabel.AutoSize = true;
+            this.TimeoutLabel.Location = new System.Drawing.Point(3, 0);
+            this.TimeoutLabel.Name = "TimeoutLabel";
+            this.TimeoutLabel.Size = new System.Drawing.Size(72, 13);
+            this.TimeoutLabel.TabIndex = 0;
+            this.TimeoutLabel.Text = "Timeout after:";
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePicker1.Location = new System.Drawing.Point(81, 3);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(183, 20);
+            this.dateTimePicker1.TabIndex = 1;
             // 
             // Form
             // 
@@ -84,6 +128,8 @@
             this.Text = "Form1";
             this.Panel.ResumeLayout(false);
             this.Panel.PerformLayout();
+            this.Top.ResumeLayout(false);
+            this.Top.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -93,6 +139,10 @@
         private System.Windows.Forms.TableLayoutPanel Panel;
         private System.Windows.Forms.TextBox In;
         private System.Windows.Forms.TextBox Out;
+        private System.Windows.Forms.ProgressBar Progress;
+        private System.Windows.Forms.FlowLayoutPanel Top;
+        private System.Windows.Forms.Label TimeoutLabel;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
     }
 }
 
