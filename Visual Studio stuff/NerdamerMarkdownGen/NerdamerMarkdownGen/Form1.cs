@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,28 +18,39 @@ namespace NerdamerMarkdownGen
 {
     public partial class Form : System.Windows.Forms.Form
     {
+        private const int EM_SETCUEBANNER = 0x1501;
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern Int32 SendMessage(IntPtr hWnd, int msg,
+            int wParam, [MarshalAs(UnmanagedType.LPWStr)]string lParam);
+
+        private void Form_Shown(object sender, EventArgs e)
+        {
+            SendMessage(In.Handle, EM_SETCUEBANNER, 0, "Enter math expression...");
+            SendMessage(Out.Handle, EM_SETCUEBANNER, 0, "Output");
+        }
+
         public static async Task<string> Get(string Uri)
         {
             using (var R = await WebRequest.CreateHttp(Uri).GetResponseAsync())
             using (var S = R.GetResponseStream()) using (var Reader = new StreamReader(S))
                 return await Reader.ReadToEndAsync();
         }
-        public static readonly Task<Engine> Algebrite = Task.Run(async () => new Engine()
+        public readonly Task<Engine> Algebrite = Task.Run(async () => new Engine()
             .Execute("var window = new Object();")
             .Execute(await Get("http://algebrite.org/dist/latest-stable/algebrite.bundle-for-browser.js")));
-        public static readonly Task<Engine> Nerdamer = Task.Run(async () => new Engine()
+        public readonly Task<Engine> Nerdamer = Task.Run(async () => new Engine()
             .Execute(await Get("http://nerdamer.com/js/nerdamer.core.js"))
             .Execute(await Get("http://nerdamer.com/js/Algebra.js"))
             .Execute(await Get("http://nerdamer.com/js/Calculus.js"))
             .Execute(await Get("http://nerdamer.com/js/Solve.js"))
             .Execute(await Get("http://nerdamer.com/js/Extra.js")));
-        public static readonly Task<Engine> NerdamerDev = Task.Run(async () => new Engine()
+        public readonly Task<Engine> NerdamerDev = Task.Run(async () => new Engine()
             .Execute(await Get("https://raw.githubusercontent.com/jiggzson/nerdamer/dev/nerdamer.core.js"))
             .Execute(await Get("https://raw.githubusercontent.com/jiggzson/nerdamer/dev/Algebra.js"))
             .Execute(await Get("https://raw.githubusercontent.com/jiggzson/nerdamer/dev/Calculus.js"))
             .Execute(await Get("https://raw.githubusercontent.com/jiggzson/nerdamer/dev/Solve.js"))
             .Execute(await Get("https://raw.githubusercontent.com/jiggzson/nerdamer/dev/Extra.js")));
-        public static async Task<string> Eval(Task<Engine> Engine, string In)
+        public async Task<string> Eval(Task<Engine> Engine, string In)
         {
             var E = await Engine;
             try
@@ -46,12 +58,13 @@ namespace NerdamerMarkdownGen
                 return await TimeoutAfter(Task.Run(() =>
                 {
                     lock (Engine) return E.Execute(In).GetCompletionValue().ToString();
-                }), (int)(30 * TimeSpan.TicksPerSecond / TimeSpan.TicksPerMillisecond));
+                }), Time);
             }
             catch (Exception ex) { return 'ⓧ' + ex.Message; }
         }
         int NumberOfTasks = 0;
         private Timer Timer = new Timer { Interval = 50 };
+        int Time = (int)TimeSpan.FromSeconds(30).TotalMilliseconds;
 
         public Form()
         {
@@ -69,18 +82,30 @@ namespace NerdamerMarkdownGen
         private async void In_TextChanged(object sender, EventArgs e) => Out.Text = await Task.Run(async () =>
             {
                 Interlocked.Increment(ref NumberOfTasks);
-                var Return = "Input|My Answer|Algebrite (@website)|Nerdamer (@demo)|Nerdamer (@dev)\r\n-|-|-|-|-\r\n" +
-                    string.Join("\r\n", await Task.WhenAll(In.Lines?.Select(x =>
-                   (x.Contains('|') ? (x.Remove(x.IndexOf('|')), x.Substring(x.IndexOf('|') + 1)) : (x, x)))
-                   .Select(async x => $"{x.Item1}|{x.Item2}|{await Eval(Algebrite, $"window.Algebrite.run('{x.Item1}')")}|{await Eval(Nerdamer, $"nerdamer('{x.Item1}')")}|{await Eval(NerdamerDev, $"nerdamer('{x.Item1}')")}")))
-                   .Replace("*", "\\*");
-                Interlocked.Decrement(ref NumberOfTasks);
-                return Return;
+                try
+                {
+                    var MyAns = In.Text.Contains("|");
+                    var Return = $"Input|{(MyAns?"My Answer|":"")}Algebrite (@website)|Nerdamer (@demo)|Nerdamer (@dev)\r\n-{(MyAns ? "|-" : "")}|-|-|-\r\n" +
+                        string.Join("\r\n", await Task.WhenAll(In.Lines?.Select(x =>
+                       (x.Contains('|') ? (x.Remove(x.IndexOf('|')), x.Substring(x.IndexOf('|') + 1)) : (x, x)))
+                       .Select(async x => $"{x.Item1}{(MyAns?"|"+x.Item2:"")}|{await Eval(Algebrite, $"window.Algebrite.run('{x.Item1}')")}|{await Eval(Nerdamer, $"nerdamer('{x.Item1}')")}|{await Eval(NerdamerDev, $"nerdamer('{x.Item1}')")}")))
+                       .Replace("*", "\\*");
+                    return Return;
+                }
+                finally
+                {
+                    Interlocked.Decrement(ref NumberOfTasks);
+                }
             });
         
         private void Out_KeyDown(object sender, KeyEventArgs e)
         {
             e.SuppressKeyPress = e.KeyData != (Keys.Control | Keys.C);
+        }
+
+        private void TimePicker_ValueChanged(object sender, EventArgs e)
+        {
+            Time = (int)TimePicker.Value.TimeOfDay.TotalMilliseconds;
         }
 
         //https://blogs.msdn.microsoft.com/pfxteam/2011/11/10/crafting-a-task-timeoutafter-method/

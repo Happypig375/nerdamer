@@ -34,7 +34,7 @@
             this.Progress = new System.Windows.Forms.ProgressBar();
             this.Top = new System.Windows.Forms.FlowLayoutPanel();
             this.TimeoutLabel = new System.Windows.Forms.Label();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.TimePicker = new System.Windows.Forms.DateTimePicker();
             this.Panel.SuspendLayout();
             this.Top.SuspendLayout();
             this.SuspendLayout();
@@ -63,6 +63,7 @@
             this.In.Dock = System.Windows.Forms.DockStyle.Fill;
             this.In.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.In.Location = new System.Drawing.Point(3, 33);
+            this.In.MaxLength = 2147483647;
             this.In.Multiline = true;
             this.In.Name = "In";
             this.In.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -75,6 +76,7 @@
             this.Out.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Out.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Out.Location = new System.Drawing.Point(3, 138);
+            this.Out.MaxLength = 2147483647;
             this.Out.Multiline = true;
             this.Out.Name = "Out";
             this.Out.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -93,7 +95,7 @@
             // Top
             // 
             this.Top.Controls.Add(this.TimeoutLabel);
-            this.Top.Controls.Add(this.dateTimePicker1);
+            this.Top.Controls.Add(this.TimePicker);
             this.Top.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Top.Location = new System.Drawing.Point(3, 3);
             this.Top.Name = "Top";
@@ -102,21 +104,25 @@
             // 
             // TimeoutLabel
             // 
-            this.TimeoutLabel.AutoSize = true;
             this.TimeoutLabel.Location = new System.Drawing.Point(3, 0);
             this.TimeoutLabel.Name = "TimeoutLabel";
-            this.TimeoutLabel.Size = new System.Drawing.Size(72, 13);
+            this.TimeoutLabel.Size = new System.Drawing.Size(72, 24);
             this.TimeoutLabel.TabIndex = 0;
             this.TimeoutLabel.Text = "Timeout after:";
+            this.TimeoutLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // dateTimePicker1
+            // TimePicker
             // 
-            this.dateTimePicker1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePicker1.Location = new System.Drawing.Point(81, 3);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(183, 20);
-            this.dateTimePicker1.TabIndex = 1;
+            this.TimePicker.CustomFormat = "H:mm:ss";
+            this.TimePicker.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.TimePicker.Location = new System.Drawing.Point(81, 3);
+            this.TimePicker.Name = "TimePicker";
+            this.TimePicker.ShowUpDown = true;
+            this.TimePicker.Size = new System.Drawing.Size(183, 20);
+            this.TimePicker.TabIndex = 1;
+            this.TimePicker.Value = new System.DateTime(2017, 9, 16, 0, 0, 30, 0);
+            this.TimePicker.ValueChanged += new System.EventHandler(this.TimePicker_ValueChanged);
             // 
             // Form
             // 
@@ -125,11 +131,11 @@
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Controls.Add(this.Panel);
             this.Name = "Form";
-            this.Text = "Form1";
+            this.Text = "Nerdamer Tester";
+            this.Shown += new System.EventHandler(this.Form_Shown);
             this.Panel.ResumeLayout(false);
             this.Panel.PerformLayout();
             this.Top.ResumeLayout(false);
-            this.Top.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -140,9 +146,9 @@
         private System.Windows.Forms.TextBox In;
         private System.Windows.Forms.TextBox Out;
         private System.Windows.Forms.ProgressBar Progress;
-        private System.Windows.Forms.FlowLayoutPanel Top;
+        private new System.Windows.Forms.FlowLayoutPanel Top;
         private System.Windows.Forms.Label TimeoutLabel;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker TimePicker;
     }
 }
 
