@@ -84,11 +84,17 @@ namespace NerdamerMarkdownGen
                 Interlocked.Increment(ref NumberOfTasks);
                 try
                 {
-                    var MyAns = In.Text.Contains("|");
+                    var (FuncA, FuncN) = In.Lines.Take(1).Select(x => x.Contains('|') ? (x.Split('|')[0], x.Split('|')[1]) : (x, x)).Single();
+                    if (string.IsNullOrWhiteSpace(FuncA)) FuncA = ".run";
+                    else FuncA = "." + FuncA;
+                    if (string.IsNullOrWhiteSpace(FuncN)) FuncN = "";
+                    else FuncN = "." + FuncN;
+
+                    var MyAns = In.Text.Substring(In.Text.IndexOf("\n") + 1).Contains("|");
                     var Return = $"Input|{(MyAns?"My Answer|":"")}Algebrite (@website)|Nerdamer (@demo)|Nerdamer (@dev)\r\n-{(MyAns ? "|-" : "")}|-|-|-\r\n" +
-                        string.Join("\r\n", await Task.WhenAll(In.Lines?.Select(x =>
+                        string.Join("\r\n", await Task.WhenAll(In.Lines?.Skip(1).Select(x =>
                        (x.Contains('|') ? (x.Remove(x.IndexOf('|')), x.Substring(x.IndexOf('|') + 1)) : (x, x)))
-                       .Select(async x => $"{x.Item1}{(MyAns?"|"+x.Item2:"")}|{await Eval(Algebrite, $"window.Algebrite.run('{x.Item1}')")}|{await Eval(Nerdamer, $"nerdamer('{x.Item1}')")}|{await Eval(NerdamerDev, $"nerdamer('{x.Item1}')")}")))
+                       .Select(async x => $"{x.Item1}{(MyAns?"|"+x.Item2:"")}|{await Eval(Algebrite, $"window.Algebrite{FuncA}('{x.Item1}')")}|{await Eval(Nerdamer, $"nerdamer{FuncN}('{x.Item1}')")}|{await Eval(NerdamerDev, $"nerdamer('{x.Item1}')")}")))
                        .Replace("*", "\\*");
                     return Return;
                 }
@@ -109,7 +115,7 @@ namespace NerdamerMarkdownGen
         }
 
         //https://blogs.msdn.microsoft.com/pfxteam/2011/11/10/crafting-a-task-timeoutafter-method/
-        [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Explicit, Size = 0)]
+        [StructLayout(LayoutKind.Explicit, Size = 0)]
         struct VoidTypeStruct { }
         public static Task<T> TimeoutAfter<T>(Task<T> task, int millisecondsTimeout)
         {

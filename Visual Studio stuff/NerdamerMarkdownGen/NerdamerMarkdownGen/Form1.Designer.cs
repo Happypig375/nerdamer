@@ -69,6 +69,7 @@
             this.In.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.In.Size = new System.Drawing.Size(278, 99);
             this.In.TabIndex = 0;
+            this.In.Text = "run|";
             this.In.TextChanged += new System.EventHandler(this.In_TextChanged);
             // 
             // Out
