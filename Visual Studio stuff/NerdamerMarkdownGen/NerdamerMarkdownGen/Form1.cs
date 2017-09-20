@@ -52,15 +52,20 @@ namespace NerdamerMarkdownGen
             .Execute(await Get("https://raw.githubusercontent.com/jiggzson/nerdamer/dev/Extra.js")));
         public async Task<string> Eval(Task<Engine> Engine, string In)
         {
-            var E = await Engine;
+            Engine E;
             try
             {
-                return await TimeoutAfter(Task.Run(() =>
-                {
-                    lock (Engine) return E.Execute(In).GetCompletionValue().ToString();
-                }), Time);
+                E = await Engine;
             }
             catch (Exception ex) { return 'ⓧ' + ex.Message; }
+            return await TimeoutAfter(Task.Run(() =>
+            {
+                try
+                {
+                    lock (Engine) return E.Execute(In).GetCompletionValue().ToString();
+                }
+                catch (Exception ex) { return 'ⓧ' + ex.Message; }
+            }), Time);
         }
         int NumberOfTasks = 0;
         private Timer Timer = new Timer { Interval = 50 };
@@ -84,6 +89,7 @@ namespace NerdamerMarkdownGen
                 Interlocked.Increment(ref NumberOfTasks);
                 try
                 {
+                    var Expand = this.Expand.Checked;
                     var (FuncA, FuncN) = In.Lines.Take(1).Select(x => x.Contains('|') ? (x.Split('|')[0], x.Split('|')[1]) : (x, x)).Single();
                     if (string.IsNullOrWhiteSpace(FuncA)) FuncA = ".run";
                     else FuncA = "." + FuncA;
@@ -91,13 +97,15 @@ namespace NerdamerMarkdownGen
                     else FuncN = "." + FuncN;
 
                     var MyAns = In.Text.Substring(In.Text.IndexOf("\n") + 1).Contains("|");
-                    var Return = $"Input|{(MyAns?"My Answer|":"")}Algebrite (@website)|Nerdamer (@demo)|Nerdamer (@dev)\r\n-{(MyAns ? "|-" : "")}|-|-|-\r\n" +
+                    var Return = $"Input|{(MyAns ? "My Answer|" : "")}Algebrite (@website{(FuncA == ".run" ? "" : ", " + FuncA.Substring(1))})|Nerdamer (@demo{(Expand ? ", expand option" : "")}{(FuncN == "" ? "" : ", " + FuncN.Substring(1))})|Nerdamer (@dev{(Expand ? ", expand option" : "")}{(FuncN == "" ? "" : ", " + FuncN.Substring(1))})\r\n-{(MyAns ? "|-" : "")}|-|-|-\r\n" +
                         string.Join("\r\n", await Task.WhenAll(In.Lines?.Skip(1).Select(x =>
                        (x.Contains('|') ? (x.Remove(x.IndexOf('|')), x.Substring(x.IndexOf('|') + 1)) : (x, x)))
-                       .Select(async x => $"{x.Item1}{(MyAns?"|"+x.Item2:"")}|{await Eval(Algebrite, $"window.Algebrite{FuncA}('{x.Item1}')")}|{await Eval(Nerdamer, $"nerdamer{FuncN}('{x.Item1}')")}|{await Eval(NerdamerDev, $"nerdamer('{x.Item1}')")}")))
+                       .Select(async x => $"{x.Item1}{(MyAns ? "|" + x.Item2 : "")}|{await Eval(Algebrite, $"window.Algebrite{FuncA}('{x.Item1}')")}|{await Eval(Nerdamer, $"nerdamer{FuncN}('{x.Item1}'{(Expand ? ", undefined, 'expand'" : "")})")}|{await Eval(NerdamerDev, $"nerdamer{FuncN}('{x.Item1}'{(Expand ? ", undefined, 'expand'" : "")})")}")))
                        .Replace("*", "\\*");
                     return Return;
                 }
+                catch (Exception ex)
+                { return 'ⓧ' + ex.ToString(); }
                 finally
                 {
                     Interlocked.Decrement(ref NumberOfTasks);
@@ -113,6 +121,8 @@ namespace NerdamerMarkdownGen
         {
             Time = (int)TimePicker.Value.TimeOfDay.TotalMilliseconds;
         }
+
+        private void Expand_CheckedChanged(object sender, EventArgs e) => In_TextChanged(sender, e);
 
         //https://blogs.msdn.microsoft.com/pfxteam/2011/11/10/crafting-a-task-timeoutafter-method/
         [StructLayout(LayoutKind.Explicit, Size = 0)]

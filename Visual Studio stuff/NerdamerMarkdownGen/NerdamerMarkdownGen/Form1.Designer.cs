@@ -35,6 +35,7 @@
             this.Top = new System.Windows.Forms.FlowLayoutPanel();
             this.TimeoutLabel = new System.Windows.Forms.Label();
             this.TimePicker = new System.Windows.Forms.DateTimePicker();
+            this.Expand = new System.Windows.Forms.CheckBox();
             this.Panel.SuspendLayout();
             this.Top.SuspendLayout();
             this.SuspendLayout();
@@ -69,7 +70,7 @@
             this.In.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.In.Size = new System.Drawing.Size(278, 99);
             this.In.TabIndex = 0;
-            this.In.Text = "run|";
+            this.In.Text = "run|\r\n ";
             this.In.TextChanged += new System.EventHandler(this.In_TextChanged);
             // 
             // Out
@@ -97,6 +98,7 @@
             // 
             this.Top.Controls.Add(this.TimeoutLabel);
             this.Top.Controls.Add(this.TimePicker);
+            this.Top.Controls.Add(this.Expand);
             this.Top.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Top.Location = new System.Drawing.Point(3, 3);
             this.Top.Name = "Top";
@@ -115,15 +117,25 @@
             // TimePicker
             // 
             this.TimePicker.CustomFormat = "H:mm:ss";
-            this.TimePicker.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.TimePicker.Location = new System.Drawing.Point(81, 3);
             this.TimePicker.Name = "TimePicker";
             this.TimePicker.ShowUpDown = true;
-            this.TimePicker.Size = new System.Drawing.Size(183, 20);
+            this.TimePicker.Size = new System.Drawing.Size(126, 20);
             this.TimePicker.TabIndex = 1;
             this.TimePicker.Value = new System.DateTime(2017, 9, 16, 0, 0, 30, 0);
             this.TimePicker.ValueChanged += new System.EventHandler(this.TimePicker_ValueChanged);
+            // 
+            // Expand
+            // 
+            this.Expand.AutoSize = true;
+            this.Expand.Location = new System.Drawing.Point(213, 3);
+            this.Expand.Name = "Expand";
+            this.Expand.Size = new System.Drawing.Size(62, 17);
+            this.Expand.TabIndex = 2;
+            this.Expand.Text = "Expand";
+            this.Expand.UseVisualStyleBackColor = true;
+            this.Expand.CheckedChanged += new System.EventHandler(this.Expand_CheckedChanged);
             // 
             // Form
             // 
@@ -137,6 +149,7 @@
             this.Panel.ResumeLayout(false);
             this.Panel.PerformLayout();
             this.Top.ResumeLayout(false);
+            this.Top.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -150,6 +163,7 @@
         private new System.Windows.Forms.FlowLayoutPanel Top;
         private System.Windows.Forms.Label TimeoutLabel;
         private System.Windows.Forms.DateTimePicker TimePicker;
+        private System.Windows.Forms.CheckBox Expand;
     }
 }
 
