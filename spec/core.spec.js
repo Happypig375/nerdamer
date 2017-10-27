@@ -15,12 +15,100 @@ describe('Nerdamer core', function () {
         // given
         var formula1 = '0/0';
         var formula2 = '0^0';
+        var formula3 = '-Infinity+Infinity';
 
         // when / then
         expect(function () { nerdamer(formula1) }).toThrowError();
         expect(function () { nerdamer(formula2) }).toThrowError();
+        expect(function () { nerdamer(formula3) }).toThrowError();
     });
+    
+    it('should correctly calculate Infinity', function () {
+        // given
+        var testCases = [
+            {
+                given: 'Infinity*Infinity',
+                expected: 'Infinity'
+            }, 
+            {
+                given: '-Infinity*Infinity',
+                expected: '-Infinity'
+            }, 
+            {
+                given: '-Infinity*-Infinity',
+                expected: 'Infinity'
+            }, 
+            {
+                given: '-a*-Infinity',
+                expected: 'Infinity*a'
+            }, 
+            {
+                given: '-a-Infinity',
+                expected: '-Infinity'
+            }, 
+            {
+                given: '-a*Infinity',
+                expected: '-Infinity*a'
+            }, 
+            {
+                given: '-a^Infinity',
+                expected: '-a^Infinity'
+            }, 
+            {
+                given: '-2^Infinity',
+                expected: '-Infinity'
+            }, 
+            {
+                given: '-2^-Infinity',
+                expected: '0'
+            }, 
+            
+        ];
 
+        for (var i = 0; i < testCases.length; ++i) {
+            // when
+            var parsed = nerdamer(testCases[i].given);
+
+            // then
+            expect(parsed.toString()).toEqual(testCases[i].expected);
+        }
+    });
+    
+    it('should calculate fib correctly', function () {
+        // given
+        var testCases = [
+            {
+                given: 'fib(0)',
+                expected: '0'
+            }, 
+            {
+                given: 'fib(14)',
+                expected: '377'
+            }, 
+            {
+                given: 'fib(-14)',
+                expected: '-377'
+            }, 
+            {
+                given: 'fib(15)',
+                expected: '610'
+            }, 
+            {
+                given: 'fib(-15)',
+                expected: '610'
+            }, 
+            
+        ];
+
+        for (var i = 0; i < testCases.length; ++i) {
+            // when
+            var parsed = nerdamer(testCases[i].given).evaluate();
+
+            // then
+            expect(parsed.toString()).toEqual(testCases[i].expected);
+        }
+    });
+    
     it('should perform simple arithmetic', function () {
         // given
         var testCases = [
@@ -357,7 +445,42 @@ describe('Nerdamer core', function () {
             expect(value).toEqual(testCases[i].expectedValue);
         }
     });
+    
+    it('should handle imaginary log arguments', function () {
+        // given
+        var testCases = [
+            {
+                given: 'log(5*i)',
+                expected: '1.5707963267948966*i+1.6094379124341003'
+            }, 
+            {
+                given: 'log(8+5*i)',
+                expected: '0.5585993153435624*i+2.24431818486607'
+            }, 
+            {
+                given: 'log(123-2*i)',
+                expected: '-0.01625872980512972*i+4.8123165343435135'
+            }, 
+            {
+                given: 'log(123-2*i+a)',
+                expected: '-atan2(123+a,-2)*i+1.5707963267948966*i+log(sqrt((123+a)^2+4))'
+            }, 
+            {
+                given: 'log(x+2*i)',
+                expected: '-atan2(x,2)*i+1.5707963267948966*i+log(sqrt(4+x^2))'
+            }
+        ];
 
+        for (var i = 0; i < testCases.length; ++i) {
+            // when
+            var parsed = nerdamer(testCases[i].given);
+            var value = parsed.evaluate().text('decimals');
+
+            // then
+            expect(value).toEqual(testCases[i].expected);
+        }
+    });
+    
     it('should compute powers', function () {
         // given
         var testCases = [
@@ -563,7 +686,12 @@ describe('Nerdamer core', function () {
                     given: 'cot(5*pi/6)',
                     expected: '-sqrt(3)',
                     expectedValue: '-1.7320508075688772'
-                }
+                },
+                {
+                    given: 'acot(0)',
+                    expected: '(1/2)*pi',
+                    expectedValue: '1.5707963267948966'
+                },
             ];
 
             for (var i = 0; i < testCases.length; ++i) {
@@ -1042,144 +1170,7 @@ describe('Nerdamer core', function () {
             expect(value).toEqual(testCases[i].expected);
         }
     });
-    
-    it('should support fib()', function () {
-        // given
-        var testCases = [
-            {
-                given: 'fib(-10)',
-                expected: '-55'
-            },
-            {
-                given: 'fib(-6)',
-                expected: '-8'
-            },
-            {
-                given: 'fib(-5)',
-                expected: '5'
-            },
-            {
-                given: 'fib(0)',
-                expected: '0'
-            },
-            {
-                given: 'fib(1)',
-                expected: '1'
-            },
-            {
-                given: 'fib(2) - fib(1)',
-                expected: '0'
-            },
-            {
-                given: 'fib(-4)/fib(4)',
-                expected: '-1'
-            },/*TODO: Add fib() with decimals (#143)
-            {
-                given: 'fib(1.2)',
-                expected: '0.9997993143257692'
-            },
-            {
-                given: 'fib(-1e-8)',
-                expected: '-4.3040891932530644e-9'
-            },
-            */
-            {
-                given: 'fib(fib(fib(fib(-1))))',
-                expected: '1'
-            },/*TODO: Failing test (rounding error)
-            {
-                given: 'fib(171)-fib(170)-fib(169)',
-                expected: '0'
-            },*//*TODO: Bugfixes...
-            {
-                given: 'fib(23.34)-fib(22.34)+fib(24.34)',
-                expected: '0'
-            },
-            {
-                given: 'fib(-23.34)/fib(23.34)',
-                expected:'-1'
-            },
-            {
-                given: 'fib(-23.34)-fib(-22.34)+fib(-24.34)',
-                expected: '0'
-            },*/
-            {
-                given: 'fib(50)+fib(51)-fib(52)',
-                expected: '0'
-            },
-            {
-                given: 'fib(77)+fib(-77)',
-                expected: '11055879401769514'
-            },
-            {
-                //The (fib(n)+fib(n-1))(fib(n-1)+fib(n-2)) == sum(fib(x)^2,x,1,n) identity (only for positive integers)
-                given: '(fib(n)+fib(n-1))(fib(n-1)+fib(n-2)) - sum(fib(x)^2,x,1,n)',
-                substitutes: [
-                    { n: 11 },
-                    { n: 33 },
-                    { n: 55 },
-                    //TODO: Failing test (rounding error)
-                    //{ n: 56 }
-                ],
-                expected: '0'
-            },
-            {
-                //The sum(fib(x),x,1,n)-fib(n+2) == -1 identity (only for positive integers)
-                given: 'sum(fib(x),x,1,n)-fib(n+2),x,1,n)',
-                substitutes: [
-                    { n: 19 },
-                    { n: 34 },
-                    { n: 76 },
-                    //TODO: Failing test (rounding error)
-                    //{ n: 77 }
-                ],
-                expected: '-1'
-            },
-            {
-                //The fib(n)^2-fib(n+1)fib(n-1) == (-1)^(n-1) identity
-                given: 'fib(n)^2-fib(n+1)fib(n-1) - (-1)^(n-1)',
-                substitutes: [
-                    { n: 23 },
-                    { n: 24 },
-                    //TODO: Failing test (rounding error)
-                    //{ n: 80 }
-                ],
-                expected: '0'
-            },
-            {
-                //The fib(n)^2-fib(n+r)fib(n-r) == (-1)^(n-r)fib(r)^2 identity
-                given: 'fib(n)^2-fib(n+r)fib(n-r) - (-1)^(n-r)fib(r)^2',
-                substitutes: [
-                    { n: 23, r: 34 },
-                    { n: 24, r: 12 },
-                    //TODO: Failing test (rounding error)
-                    //{ n: 80, r: 11 }
-                ],
-                expected: '0'
-            }
-        ];
-        
-        for (var i = 0; i < testCases.length; ++i) {
-            // when
-            var parsed = nerdamer(testCases[i].given);
-            
-            if(testCases[i].substitutes) {
-                for (var j = 0; j < testCases[i].substitutes.length; ++j) {
-                    var value = parsed.evaluate(testCases[i].substitutes[j]).text('decimals');
-                    
-                    // then
-                    expect(value).toEqual(testCases[i].expected);
-                }
-            }
-            else {
-                var value = parsed.evaluate().text('decimals');
-            
-                // then
-                expect(value).toEqual(testCases[i].expected);
-            }
-        }
-    });
-    
+
     /** #35 #76: Support multiple minus signs and brackets */
     it('should support prefix operator with parantheses', function () {
       // given
