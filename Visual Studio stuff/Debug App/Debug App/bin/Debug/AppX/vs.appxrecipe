@@ -20,7 +20,7 @@
     <WindowsSdkPath>
     </WindowsSdkPath>
     <LayoutDir>C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\Debug App\Debug App\bin\Debug\AppX</LayoutDir>
-    <RegisteredManifestChecksum>103214EA800D485DC8D920BE69DAD85109D444527200225882A20C1DB4E7A8F4</RegisteredManifestChecksum>
+    <RegisteredManifestChecksum>0BFB7E946EB15221B807DDAA7A24C70F649D767C24BD5C7ECA39D1F3891FD9A7</RegisteredManifestChecksum>
     <RegisteredPackageMoniker>2aa96b9e-d115-4893-bb76-73a38f0c7ef2_1.0.0.0_neutral__yzekw4x8qxe1g</RegisteredPackageMoniker>
     <RegisteredUserModeAppID>2aa96b9e-d115-4893-bb76-73a38f0c7ef2_yzekw4x8qxe1g!App</RegisteredUserModeAppID>
     <RegisteredPackageID>2aa96b9e-d115-4893-bb76-73a38f0c7ef2</RegisteredPackageID>
@@ -32,17 +32,17 @@
     <AppXManifest Include="C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\Debug App\Debug App\bin\Debug\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2017-09-05T13:53:06.403</Modified>
+      <Modified>2017-10-27T14:31:49.293</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\user\Source\Repos\nerdamer\Algebra.js">
       <PackagePath>Algebra.js</PackagePath>
-      <Modified>2017-09-02T07:01:23.694</Modified>
+      <Modified>2017-10-27T14:21:30.057</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\Source\Repos\nerdamer\all.js">
       <PackagePath>all.js</PackagePath>
-      <Modified>2017-08-23T08:04:13.128</Modified>
+      <Modified>2017-10-27T14:21:30.076</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\Source\Repos\nerdamer\Calculus.js">
       <PackagePath>Calculus.js</PackagePath>
@@ -54,15 +54,15 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\Source\Repos\nerdamer\nerdamer.core.js">
       <PackagePath>nerdamer.core.js</PackagePath>
-      <Modified>2017-09-02T07:01:23.702</Modified>
+      <Modified>2017-10-27T14:21:30.086</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\Source\Repos\nerdamer\Solve.js">
       <PackagePath>Solve.js</PackagePath>
-      <Modified>2017-09-02T07:01:23.696</Modified>
+      <Modified>2017-10-27T14:21:30.075</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\Debug App\Debug App\js\main.js">
       <PackagePath>js\main.js</PackagePath>
-      <Modified>2017-09-05T13:52:58.139</Modified>
+      <Modified>2017-10-27T14:31:43.299</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\Debug App\Debug App\index.html">
       <PackagePath>index.html</PackagePath>
@@ -109,7 +109,7 @@
     <AppxPackagedFile Include="C:\Users\user\Source\Repos\nerdamer\Visual Studio stuff\Debug App\Debug App\bin\Debug\ReverseMap\resources.pri">
       <PackagePath>resources.pri</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2017-08-31T14:04:59.704</Modified>
+      <Modified>2017-10-15T07:22:07.384</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

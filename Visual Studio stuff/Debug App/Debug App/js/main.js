@@ -1,2 +1,2 @@
 ﻿// Your code here!
-document.write(nerdamer('factor(4s-t^2+4t-s t)').toString());
+document.write(nerdamer('acsch(1)').toString());
