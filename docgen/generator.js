@@ -34,7 +34,7 @@ let example_template = fs.readFileSync(example_file).toString();
                 let parameter = page.parameters[parameter_name];
                 let t = parameter_template.replace(/%name%/g, parameter_name);
                 for(let entry in parameter) {
-                    t = t.replace(new RegExp('%'+entry+'%', 'g'), parameter[entry]);
+                    t = t.replace(new RegExp('%'+entry+'%', 'g'), parameter[entry] || '');
                 }
                 contents += t;
             }
