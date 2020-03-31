@@ -110,6 +110,11 @@ body {
 }
 .parameter-name {
     font-weight: 800;
+}
+.parameter-optional {
+    color: #999999;
+    font-weight: 100;
+    font-style: italic;
     margin-right: 20px;
 }
 .function-doc-main {
