@@ -13,16 +13,19 @@ FUNCTIONS = {
             },
             subs: {
                 type: "Object",
-                description: "An object of known values"
+                description: "An object of known values",
+                optional: 'Optional'
             },
             option: {
                 type: "String|String[]",
                 description: "A string or array containing additional options such as parsing directly to number or expanding the expression. Use \"numer\" to "+
-                        "when wanting the expression to be evaluated. Use \"expand\" when wanting the expression to be expanded."
+                        "when wanting the expression to be evaluated. Use \"expand\" when wanting the expression to be expanded.",
+                optional: 'Optional'
             },
             location: {
                 type: "int",
-                description: "The index of where the expression should be stored."
+                description: "The index of where the expression should be stored.",
+                optional: 'Optional'
             }
         },
         examples: [
@@ -125,7 +128,8 @@ FUNCTIONS = {
         parameters: {
             option: {
                 type: 'String',
-                description: 'Use "LaTeX" to get as LaTeX. Defaults to text.'
+                description: 'Use "LaTeX" to get as LaTeX. Defaults to text.',
+                optional: 'Optional'
             }
         },
         examples: [
@@ -146,11 +150,13 @@ FUNCTIONS = {
         parameters: {
             x: {
                 type: 'bool',
-                description: 'Pass in true to get expression as numbered object with 1 as starting index'
+                description: 'Pass in true to get expression as numbered object with 1 as starting index',
+                optional: 'Optional'
             },
             y: {
                 type: 'String',
-                description: 'Pass in the string "LaTeX" to get the expression to LaTeX, otherwise expressions come back as strings'
+                description: 'Pass in the string "LaTeX" to get the expression to LaTeX, otherwise expressions come back as strings',
+                optional: 'Optional'
             }
         },
         examples: [
