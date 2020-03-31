@@ -13,19 +13,19 @@ FUNCTIONS = {
             },
             subs: {
                 type: "Object",
-                description: "An object of known values",
-                optional: 'Optional'
+                optional: 'Optional',
+                description: "An object of known values"
             },
             option: {
                 type: "String|String[]",
+                optional: 'Optional',
                 description: "A string or array containing additional options such as parsing directly to number or expanding the expression. Use \"numer\" to "+
-                        "when wanting the expression to be evaluated. Use \"expand\" when wanting the expression to be expanded.",
-                optional: 'Optional'
+                        "when wanting the expression to be evaluated. Use \"expand\" when wanting the expression to be expanded."
             },
             location: {
                 type: "int",
-                description: "The index of where the expression should be stored.",
-                optional: 'Optional'
+                optional: 'Optional',
+                description: "The index of where the expression should be stored."
             }
         },
         examples: [
@@ -53,6 +53,7 @@ FUNCTIONS = {
             },
             value: {
                 type: "Number|expression|string",
+                optional: 'Optional',
                 description: "The value for the expression to be set to."
             }
         },
@@ -78,6 +79,7 @@ FUNCTIONS = {
             },
             value: {
                 type: "Number|expression string",
+                optional: 'Optional',
                 description: "The value for the expression to be set to."
             }
         },
@@ -128,8 +130,8 @@ FUNCTIONS = {
         parameters: {
             option: {
                 type: 'String',
-                description: 'Use "LaTeX" to get as LaTeX. Defaults to text.',
-                optional: 'Optional'
+                optional: 'Optional',
+                description: 'Use "LaTeX" to get as LaTeX. Defaults to text.'
             }
         },
         examples: [
@@ -150,13 +152,13 @@ FUNCTIONS = {
         parameters: {
             x: {
                 type: 'bool',
-                description: 'Pass in true to get expression as numbered object with 1 as starting index',
-                optional: 'Optional'
+                optional: 'Optional',
+                description: 'Pass in true to get expression as numbered object with 1 as starting index'
             },
             y: {
                 type: 'String',
-                description: 'Pass in the string "LaTeX" to get the expression to LaTeX, otherwise expressions come back as strings',
-                optional: 'Optional'
+                optional: 'Optional',
+                description: 'Pass in the string "LaTeX" to get the expression to LaTeX, otherwise expressions come back as strings'
             }
         },
         examples: [
@@ -178,11 +180,13 @@ FUNCTIONS = {
         parameters: {
             x: {
                 type: 'int | String',
+                optional: 'Optional',
                 description: 'The index of the expression with 1 as the starting index. Use the string "last" for last expression. \n\
                               Use the string "first" for the first. Use the string "all" to clear all stored expressions.'
             },
             fix_indeces: {
                 type: 'bool',
+                optional: 'Optional',
                 description: "Maintains indices as they are when expression is deleted"
             }
         },
@@ -224,6 +228,7 @@ FUNCTIONS = {
         parameters: {
             x: {
                 type: 'int',
+                optional: 'Optional',
                 description: "The index of the expression starting at 1. Pass in 'first' to get first and 'last' to get the last expression."
             }
         },
